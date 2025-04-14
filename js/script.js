@@ -1,117 +1,121 @@
-const VALID_SELECTIONS = ['rock', 'paper', 'scissors'];
+const VALID_INPUT = ['rock', 'paper', 'scissors', 'yes', 'no'];
+const GAME_PLAY_SELECTIONS = VALID_INPUT.slice(0, 3);
+const YES_OR_NO = VALID_INPUT.slice(3);
 
-// const FUN_WINNING_RESPONSES = []
-// const FUN_LOSING_RESPONSES = []
-
-function getComputerChoice() {
-  const choiceSelection = Math.floor(Math.random() * 3);
-  return VALID_SELECTIONS[choiceSelection];
-}
-
-function getHumanChoice() {
-  let input = inputPrompt();
-  while (!VALID_SELECTIONS.includes(input)) {
-    input = inputPrompt();
-  }
-  return input;
-}
-
-function inputPrompt() {
-  const userSelection = prompt("Please enter a selection of either 'rock', 'paper', or 'scissors': ").trim().toLowerCase();
-  return userSelection;
-}
-
-function playRound() {
-  const humanChoice = getHumanChoice();
-  const computerChoice = getComputerChoice();
-
-  console.log(`Your choice is ${humanChoice}`);
-  console.log(`The computer's choice is ${computerChoice}`);
-
-  if (humanChoice === 'rock') {
-    if (computerChoice === 'scissors') {
-      responseStr('win');
-      return 'win';
-    } else if (computerChoice === 'paper') {
-      responseStr('loss');
-      return 'loss';
-    } else {
-      responseStr();
-    }
-  } else if (humanChoice === 'paper') {
-    if (computerChoice === 'rock') {
-      responseStr('win');
-      return 'win';
-    } else if (computerChoice === 'scissors') {
-      responseStr('loss');
-      return 'loss';
-    } else {
-      responseStr();
-    }
-  } else if (humanChoice === 'scissors') {
-    if (computerChoice === 'paper') {
-      responseStr('win');
-      return 'win';
-    } else if (computerChoice === 'rock') {
-      responseStr('loss');
-      return 'loss';
-    } else {
-      responseStr();
-    }
-  } else {
-    console.log('There appears to be a problem here... Probably in the function playRound');
-  }
-  return 'tie';
-}
-
-function responseStr(outcome = 'tie') {
-  if (outcome === 'win') {
-    console.log("You won!");
-  } else if (outcome === 'loss') {
-    console.log("You lost... Have you seen The Terminator, you can do better than that");
-  } else if (outcome === 'tie') {
-    console.log("It's a tie, another round!");
-  }
-  return "There's been a problem sir... in function responseStr";
-}
-
-function playGame() {
-  let humanScore = 0;
-  let computerScore = 0;
-
-  // TODO: sanitize input here!
-  let numberOfGames = Number(prompt("Please enter how many rounds of Tic Tac Toe you would like to play: ").trim());
-
-  for (let i = 0; i < numberOfGames; i++) {
-    const result = playRound();
-    if (result === 'win') {
-      humanScore++;
-    } else if (result === 'loss') {
-      computerScore++;
-    }
-    console.log(`The current score is \nHuman: ${humanScore} Computer: ${computerScore}`);
-  }
-  
-  if (humanScore > computerScore) {
-    console.log("You won this match good work!");
-  } else if (humanScore < computerScore) {
-    console.log("You lost this match, you can do better. Just keep trying!");
-  }
-}
-
-function playAgainQ() {
-  let userChoice;
-  do {
-    userChoice = prompt("Would you like to play again (pleaes enter 'yes' or 'no')").trim().toLowerCase();
-  } while (!userChoice.includes(['yes', 'no']));
-  
-  if (userChoice === 'yes') {
-    console.log("Another round, let's play!");
-    playAgainQ();
-  } else {
-    console.log("It was fun while it lasted, adieu to you!");
+const NUMBER_OF_ROUNDS = 5;
+const OUTPUT = {
+  'win': `You won! Good job\nPress "Ok" below to see the current score and go to the next round`, 
+  'loss': `You lost! Do better next time\nPress "Ok" below to see the current score and go to the next round`,
+  'tie': `It's a tie! Another round\nPress "Ok" below to see the current score and go to the next round`,
+  'player_sel_prompt': `Please enter one of the following selections "rock", "paper", or "scissors"`,
+  'welcome_greeting': `Welcome to Rock, Paper, Scissors! Press "Ok" below to play the best of five rounds!`,
+  'play_again_q': `Would you like to play again? If so please enter 'yes'! If not please enter 'no'`,
+  'goodbye': `It was fun while it lasted, have a good rest of your day!`,
+  scoreDisplay(plySc, cpuSc) {
+    return `The current score is,\n\nPlayer: ${plySc}\nComputer: ${cpuSc}\n\nPress "Ok" below to contiue`;
+  },
+  decideWinner(plySc, cpuSc) {
+    return `The Winner is... \n\n${plySc > cpuSc ? "Yourself!" : "The computer :/"}`;
   }
 }
 
 playGame();
-playAgainQ();
+
+function playGame() {
+  while (true) {
+    gameLoop();
+    if (!anotherGameQ()) break;
+  }
+}
+
+function gameLoop() {
+  let humanScore = 0;
+  let computerScore = 0;
+
+  let humanRoundChoice;
+  let computerRoundChoice;
+  let result;
+
+  alert(OUTPUT['welcome_greeting']);
+
+  while(highestScore(humanScore, computerScore) < gamesNeededToWin(NUMBER_OF_ROUNDS)) {
+    humanRoundChoice = getHumanChoice();
+    computerRoundChoice = getComputerChoice();
+    
+    // Results are either 'win', 'loss', or 'tie' in ref to the player
+    result = playRound(humanRoundChoice, computerRoundChoice);
+
+    if (result === 'win') {
+      humanScore++;
+      alert(OUTPUT['win']);
+    } else if (result === 'loss') {
+      computerScore++;
+      alert(OUTPUT['loss']);
+    } else {
+      alert(OUTPUT['tie']);
+    }
+    alert(OUTPUT.scoreDisplay(humanScore, computerScore));
+  }
+  alert(OUTPUT.decideWinner(humanScore, computerScore));
+}
+
+// More accurately 'decide round'
+function playRound(humanChoice, computerChoice) {
+  if (humanChoice === 'rock') {
+    if (computerChoice === 'scissors') {
+      return 'win';
+    } else if (computerChoice === 'paper') {
+      return 'loss';
+    }
+  } else if (humanChoice === 'paper') {
+    if (computerChoice === 'rock') {
+      return 'win';
+    } else if (computerChoice === 'scissors') {
+      return 'loss';
+    }
+  } else if (humanChoice === 'scissors') {
+    if (computerChoice === 'paper') {
+      return 'win';
+    } else if (computerChoice === 'rock') {
+      return 'loss';
+    }
+  } else {
+    return 'tie';
+  }
+}
+
+function anotherGameQ() {
+  let anotherGame;
+  do {
+    anotherGame = prompt(OUTPUT['play_again_q']).trim().toLowerCase();
+  } while(!YES_OR_NO.includes(anotherGame));
+
+  if (anotherGame === 'yes') {
+    return true;
+  } else if (anotherGame === 'no'){
+    alert(OUTPUT['goodbye']);
+    return false;
+  }
+}
+
+
+function highestScore(score1, score2) {
+  return score1 > score2 ? score1 : score2;
+}
+
+function gamesNeededToWin(numberOfRounds) {
+  return Math.floor(numberOfRounds / 2) + 1;
+}
+
+function getComputerChoice() {
+  return GAME_PLAY_SELECTIONS[Math.floor(Math.random() * GAME_PLAY_SELECTIONS.length)];
+}
+
+function getHumanChoice() {
+  let humanInput;
+  do {
+    humanInput = prompt(OUTPUT['player_sel_prompt']).trim().toLowerCase();
+  } while(!VALID_INPUT.includes(humanInput));
+
+  return humanInput;
+}
