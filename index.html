@@ -4,10 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic Tac Toe</title>
-  <script defer src="./js/script.js"></script>
+  <link rel="stylesheet" href="./css/styles.css">
+  <script defer src="./js/script-rp.js"></script>
 </head>
 <body>
-  <h1>Odin Project</h1>
-  <h2>Rock Paper Scissors Game</h2>
+  <div id="title-container">
+    <h1>Rock Paper Scissors!</h1>
+    <p>Play below</p>
+  </div>
+  <div id="round-num-holder"><span id="round-number">Round Number 1</span></div>
+  <div class="score-container">
+    <div><p class="score-holder">CPU <span id="cpu-score">0</span></p></div>
+    <div><p class="score-holder">User <span id="user-score">0</span></p></div>
+  </div>
+  <div><span id="display-result"></span></div>
+  <div class="btn-container">
+    <div id="rock-btn"><span class="btn-selection">Rock</span></div>
+    <div id="paper-btn"><span class="btn-selection">Paper</span></div>
+    <div id="scissor-btn"><span class="btn-selection">Scissors</span></div>
+  </div>
+  <div id="another-game-holder">
+    <h6 id="another-game-btn">Click for another Game</h6>
+  </div>
 </body>
+<footer>
+  <h6>Odin Project</h6>
+  <h6>Rock Paper Scissors Game</h6>
+</footer>
 </html>

@@ -2,6 +2,23 @@ const VALID_INPUT = ['rock', 'paper', 'scissors', 'yes', 'no'];
 const GAME_PLAY_SELECTIONS = VALID_INPUT.slice(0, 3);
 const YES_OR_NO = VALID_INPUT.slice(3);
 
+const rockBtn = document.querySelector("#rock-btn");
+const paperBtn = document.querySelector("#paper-btn");
+const scissorBtn = document.querySelector("#scissor-btn");
+
+rockBtn.addEventListener("click", () => {
+  console.log('rock was pressed')
+  getHumanChoice('rock');
+})
+paperBtn.addEventListener("click", () => {
+  console.log('paper was pressed')
+  getHumanChoice('paper');
+})
+scissorBtn.addEventListener("click", () => {
+  console.log('scissors was pressed')
+  getHumanChoice('scissors');
+})
+
 const NUMBER_OF_ROUNDS = 5;
 const OUTPUT = {
   'win': `You won! Good job\nPress "Ok" below to see the current score and go to the next round`, 
@@ -111,11 +128,13 @@ function getComputerChoice() {
   return GAME_PLAY_SELECTIONS[Math.floor(Math.random() * GAME_PLAY_SELECTIONS.length)];
 }
 
-function getHumanChoice() {
-  let humanInput;
-  do {
-    humanInput = prompt(OUTPUT['player_sel_prompt']).trim().toLowerCase();
-  } while(!VALID_INPUT.includes(humanInput));
+function getHumanChoice(btnPressed) {
+  // let humanInput;
+  // do {
+  //   // TODO: input from buttons instead of typing
+  //   humanInput = prompt(OUTPUT['player_sel_prompt']).trim().toLowerCase();
+  // } while(!VALID_INPUT.includes(humanInput));
+
 
   return humanInput;
 }
